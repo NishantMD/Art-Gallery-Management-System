@@ -1,0 +1,786 @@
+create database project;
+use project;
+
+-- Table for storing information about artists
+CREATE TABLE Artists (
+    artist_id INT PRIMARY KEY,
+    artist_name VARCHAR(100) NOT NULL,
+    birth_date DATE,
+    nationality VARCHAR(50)
+);
+
+-- Table for storing information about artworks
+CREATE TABLE Artworks (
+    artwork_id INT PRIMARY KEY,
+    artwork_title VARCHAR(100) NOT NULL,
+    artist_id INT,
+    creation_date DATE,
+    medium VARCHAR(50),
+    genre VARCHAR(50),
+    price DECIMAL(10, 2),
+    FOREIGN KEY (artist_id) REFERENCES Artists(artist_id)
+);
+
+-- Table for storing information about customers
+CREATE TABLE Customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100),
+    phone_number VARCHAR(20)
+);
+
+-- Table for storing information about exhibitions
+CREATE TABLE Exhibitions (
+    exhibition_id INT PRIMARY KEY,
+    exhibition_name VARCHAR(100) NOT NULL,
+    start_date DATE,
+    end_date DATE
+);
+
+-- Table for storing information about gallery locations
+CREATE TABLE GalleryLocations (
+    location_id INT PRIMARY KEY,
+    location_name VARCHAR(100) NOT NULL,
+    address VARCHAR(200),
+    city VARCHAR(100),
+    country VARCHAR(100),
+    postal_code VARCHAR(20)
+);
+
+-- Table for storing information about gallery spaces
+CREATE TABLE GallerySpaces (
+    space_id INT PRIMARY KEY,
+    space_name VARCHAR(100) NOT NULL,
+    location_id INT,
+    capacity INT,
+    FOREIGN KEY (location_id) REFERENCES GalleryLocations(location_id)
+);
+
+-- Table for storing information about transactions
+CREATE TABLE Transactions (
+    transaction_id INT PRIMARY KEY,
+    customer_id INT,
+    artwork_id INT,
+    sale_date DATE,
+    price DECIMAL(10, 2),
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
+    FOREIGN KEY (artwork_id) REFERENCES Artworks(artwork_id)
+);
+
+-- Table for storing information about employee roles
+CREATE TABLE EmployeeRoles (
+    role_id INT PRIMARY KEY,
+    role_name VARCHAR(100) NOT NULL
+);
+
+-- Table for storing information about employees
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY,
+    employee_name VARCHAR(100) NOT NULL,
+    role_id INT,
+    location_id INT,
+    FOREIGN KEY (role_id) REFERENCES EmployeeRoles(role_id),
+    FOREIGN KEY (location_id) REFERENCES GalleryLocations(location_id)
+);
+
+-- Table for storing information about artwork placements in exhibitions
+CREATE TABLE ExhibitionArtworks (
+    exhibition_id INT,
+    artwork_id INT,
+    space_id INT,
+    PRIMARY KEY (exhibition_id, artwork_id),
+    FOREIGN KEY (exhibition_id) REFERENCES Exhibitions(exhibition_id),
+    FOREIGN KEY (artwork_id) REFERENCES Artworks(artwork_id),
+    FOREIGN KEY (space_id) REFERENCES GallerySpaces(space_id)
+);
+-- Adding 50 values to the Artists table
+INSERT INTO Artists (artist_id, artist_name, birth_date, nationality) VALUES
+(1, 'John Smith', '1980-01-15', 'American'),
+(2, 'Maria Garcia', '1975-05-20', 'Spanish'),
+(3, 'Wei Chen', '1990-11-02', 'Chinese'),
+(4, 'Anna Petrova', '1988-07-10', 'Russian'),
+(5, 'Ahmed Hassan', '1972-03-25', 'Egyptian'),
+(6, 'Sophie Dubois', '1985-09-12', 'French'),
+(7, 'Hiroshi Tanaka', '1977-06-30', 'Japanese'),
+(8, 'Isabella Rossi', '1995-02-18', 'Italian'),
+(9, 'Miguel Fernandez', '1982-04-05', 'Mexican'),
+(10, 'Olga Ivanova', '1970-12-22', 'Russian'),
+(11, 'Chen Wei', '1987-08-14', 'Chinese'),
+(12, 'Johan Svensson', '1993-10-08', 'Swedish'),
+(13, 'Luis Hernandez', '1978-11-19', 'Spanish'),
+(14, 'Sophia Johnson', '1983-06-28', 'American'),
+(15, 'Yuki Takahashi', '1991-09-03', 'Japanese'),
+(16, 'Elena Sokolova', '1986-05-17', 'Russian'),
+(17, 'Muhammad Ali', '1974-03-12', 'Pakistani'),
+(18, 'Isabelle Leclerc', '1994-07-09', 'French'),
+(19, 'Giorgio Rossi', '1981-01-24', 'Italian'),
+(20, 'Hassan Ahmed', '1976-08-07', 'Egyptian'),
+(21, 'Nina Petrovna', '1992-12-30', 'Russian'),
+(22, 'Liu Wei', '1984-06-16', 'Chinese'),
+(23, 'Anna Kuznetsova', '1979-02-11', 'Russian'),
+(24, 'Maria Gonzalez', '1989-10-27', 'Spanish'),
+(25, 'Johan Andersson', '1973-04-03', 'Swedish'),
+(26, 'Emma Smith', '1996-07-18', 'British'),
+(27, 'Ryuji Suzuki', '1980-11-21', 'Japanese'),
+(28, 'Laura Rossi', '1977-03-06', 'Italian'),
+(29, 'Mohammed Khalid', '1990-09-14', 'Egyptian'),
+(30, 'Sofia Hernandez', '1988-01-01', 'Mexican'),
+(31, 'Viktor Ivanov', '1975-05-20', 'Russian'),
+(32, 'Li Wei', '1982-08-23', 'Chinese'),
+(33, 'Elena Petrova', '1994-12-09', 'Russian'),
+(34, 'Ahmad Khan', '1979-06-26', 'Pakistani'),
+(35, 'Camille Leclerc', '1985-02-17', 'French'),
+(36, 'Giovanni De Luca', '1991-10-04', 'Italian'),
+(37, 'Hassan Ali', '1978-04-13', 'Egyptian'),
+(38, 'Sophie Martin', '1983-07-29', 'French'),
+(39, 'Satoshi Yamamoto', '1995-03-22', 'Japanese'),
+(40, 'Nina Kuznetsova', '1971-09-10', 'Russian'),
+(41, 'Xiao Chen', '1986-01-28', 'Chinese'),
+(42, 'Maria Petrova', '1989-05-05', 'Russian'),
+(43, 'Carlos Lopez', '1974-08-19', 'Spanish'),
+(44, 'Michael Johnson', '1992-11-25', 'American'),
+(45, 'Yuki Nakamura', '1980-06-09', 'Japanese'),
+(46, 'Anastasia Sokolova', '1976-02-02', 'Russian'),
+(47, 'Muhammad Khan', '1985-07-15', 'Pakistani'),
+(48, 'Claire Dubois', '1993-12-31', 'French'),
+(49, 'Giuseppe Ferrari', '1972-10-16', 'Italian'),
+(50, 'Fatima Ahmed', '1987-04-08', 'Egyptian');
+
+INSERT INTO Artworks (artwork_id, artwork_title, artist_id, creation_date, medium, genre, price) VALUES
+(1, 'Starry Night', 1, '1889-06-01', 'Oil on canvas', 'Post-Impressionism', 10000000.00),
+(2, 'Mona Lisa', 2, '1503-01-01', 'Oil on poplar panel', 'Portrait', 20000000.00),
+(3, 'The Persistence of Memory', 3, '1931-01-01', 'Oil on canvas', 'Surrealism', 15000000.00),
+(4, 'Guernica', 4, '1937-01-01', 'Oil on canvas', 'Cubism', 30000000.00),
+(5, 'The Scream', 5, '1893-01-01', 'Oil, pastel, and crayon on cardboard', 'Expressionism', 25000000.00),
+(6, 'The Starry Night Over the Rhône', 6, '1888-01-01', 'Oil on canvas', 'Post-Impressionism', 12000000.00),
+(7, 'The Night Watch', 7, '1642-01-01', 'Oil on canvas', 'Baroque', 22000000.00),
+(8, 'The Birth of Venus', 8, '1484-01-01', 'Tempera on canvas', 'Renaissance', 18000000.00),
+(9, 'Les Demoiselles d''Avignon', 9, '1907-01-01', 'Oil on canvas', 'Cubism', 28000000.00),
+(10, 'The Girl with a Pearl Earring', 10, '1665-01-01', 'Oil on canvas', 'Baroque', 17000000.00),
+(11, 'The Great Wave off Kanagawa', 11, '1830-01-01', 'Woodblock print', 'Ukiyo-e', 16000000.00),
+(12, 'The Last Supper', 12, '1495-01-01', 'Tempera on gesso, pitch and mastic', 'Renaissance', 30000000.00),
+(13, 'American Gothic', 13, '1930-01-01', 'Oil on beaverboard', 'Regionalism', 25000000.00),
+(14, 'The Thinker', 14, '1904-01-01', 'Bronze', 'Modern', 35000000.00),
+(15, 'The Kiss', 15, '1907-01-01', 'Oil on canvas', 'Symbolism', 21000000.00),
+(16, 'Campbell''s Soup Cans', 16, '1962-01-01', 'Acrylic, silkscreen ink, and graphite on canvas', 'Pop Art', 40000000.00),
+(17, 'Water Lilies', 17, '1916-01-01', 'Oil on canvas', 'Impressionism', 23000000.00),
+(18, 'The Birth of Adam', 18, '1511-01-01', 'Fresco', 'Renaissance', 32000000.00),
+(19, 'The Sleeping Gypsy', 19, '1897-01-01', 'Oil on canvas', 'Post-Impressionism', 27000000.00),
+(20, 'The Garden of Earthly Delights', 20, '1490-01-01', 'Oil on panel', 'Renaissance', 28000000.00),
+(21, 'The Son of Man', 21, '1964-01-01', 'Oil on canvas', 'Surrealism', 38000000.00),
+(22, 'The School of Athens', 22, '1511-01-01', 'Fresco', 'Renaissance', 31000000.00),
+(23, 'The Weeping Woman', 23, '1937-01-01', 'Oil on canvas', 'Cubism', 26000000.00),
+(24, 'The Creation of Adam', 24, '1512-01-01', 'Fresco', 'Renaissance', 30000000.00),
+(25, 'Nighthawks', 25, '1942-01-01', 'Oil on canvas', 'Modern', 28000000.00),
+(26, 'Sunflowers', 26, '1889-01-01', 'Oil on canvas', 'Post-Impressionism', 11000000.00),
+(27, 'A Sunday Afternoon on the Island of La Grande Jatte', 27, '1884-01-01', 'Oil on canvas', 'Post-Impressionism', 14000000.00),
+(28, 'The Birth of Venus', 28, '1879-01-01', 'Oil on canvas', 'Realism', 16000000.00),
+(29, 'The Arnolfini Portrait', 29, '1434-01-01', 'Oil on oak panel', 'Northern Renaissance', 19000000.00),
+(30, 'The Creation of Adam', 30, '1508-01-01', 'Fresco', 'High Renaissance', 22000000.00),
+(31, 'The Night Cafe', 31, '1888-01-01', 'Oil on canvas', 'Post-Impressionism', 12000000.00),
+(32, 'The Garden of Earthly Delights', 32, '1495-01-01', 'Oil on oak panel', 'Renaissance', 20000000.00),
+(33, 'The Raft of the Medusa', 33, '1818-01-01', 'Oil on canvas', 'Romanticism', 17000000.00),
+(34, 'Self-Portrait with Thorn Necklace and Hummingbird', 34, '1940-01-01', 'Oil on canvas', 'Surrealism', 26000000.00),
+(35, 'The Starry Night', 35, '1889-01-01', 'Oil on canvas', 'Post-Impressionism', 13000000.00),
+(36, 'The Birth of Venus', 36, '1863-01-01', 'Oil on canvas', 'Academic art', 18000000.00),
+(37, 'Las Meninas', 37, '1656-01-01', 'Oil on canvas', 'Baroque', 21000000.00),
+(38, 'The Blue Boy', 38, '1770-01-01', 'Oil on canvas', 'Rococo', 23000000.00),
+(39, 'Liberty Leading the People', 39, '1830-01-01', 'Oil on canvas', 'Romanticism', 22000000.00),
+(40, 'Girl with a Pearl Earring', 40, '1665-01-01', 'Oil on canvas', 'Baroque', 24000000.00),
+(41, 'The Death of Marat', 41, '1793-01-01', 'Oil on canvas', 'Neoclassicism', 20000000.00),
+(42, 'The Storm on the Sea of Galilee', 42, '1633-01-01', 'Oil on canvas', 'Baroque', 19000000.00),
+(43, 'The Hay Wain', 43, '1821-01-01', 'Oil on canvas', 'Romanticism', 21000000.00),
+(44, 'The Arnolfini Portrait', 44, '1434-01-01', 'Oil on oak panel', 'Northern Renaissance', 19000000.00),
+(45, 'The Card Players', 45, '1890-01-01', 'Oil on canvas', 'Post-Impressionism', 22000000.00),
+(46, 'The Dance Class', 46, '1874-01-01', 'Oil on canvas', 'Impressionism', 25000000.00),
+(47, 'Nighthawks', 47, '1942-01-01', 'Oil on canvas', 'Modern', 28000000.00),
+(48, 'Composition VII', 48, '1913-01-01', 'Oil on canvas', 'Abstract', 30000000.00),
+(49, 'Black Square', 49, '1915-01-01', 'Oil on canvas', 'Suprematism', 32000000.00),
+(50, 'Girl with a Pearl Earring', 50, '1665-01-01', 'Oil on canvas', 'Baroque', 24000000.00);
+
+
+
+
+
+
+INSERT INTO Customers (customer_id, customer_name, email, phone_number) VALUES
+(1, 'John Doe', 'john@example.com', '123-456-7890'),
+(2, 'Jane Smith', 'jane@example.com', '987-654-3210'),
+(3, 'Michael Johnson', 'michael@example.com', '555-555-5555'),
+(4, 'Emily Brown', 'emily@example.com', '111-222-3333'),
+(5, 'David Wilson', 'david@example.com', '444-555-6666'),
+(6, 'Sarah Martinez', 'sarah@example.com', '777-888-9999'),
+(7, 'Robert Taylor', 'robert@example.com', '333-222-1111'),
+(8, 'Jennifer Garcia', 'jennifer@example.com', '666-777-8888'),
+(9, 'Christopher Lopez', 'chris@example.com', '999-888-7777'),
+(10, 'Mary Hernandez', 'mary@example.com', '222-333-4444'),
+(11, 'James Gonzalez', 'james@example.com', '888-999-0000'),
+(12, 'Jessica Perez', 'jessica@example.com', '111-444-7777'),
+(13, 'Daniel Smith', 'daniel@example.com', '444-777-1111'),
+(14, 'Maria Rodriguez', 'maria@example.com', '777-111-4444'),
+(15, 'David Martinez', 'davidm@example.com', '222-333-6666'),
+(16, 'Susan Johnson', 'susan@example.com', '666-222-3333'),
+(17, 'Joseph Brown', 'joseph@example.com', '333-555-8888'),
+(18, 'Karen Wilson', 'karen@example.com', '888-555-3333'),
+(19, 'Richard Jones', 'richard@example.com', '555-888-2222'),
+(20, 'Patricia Davis', 'patricia@example.com', '222-888-5555'),
+(21, 'Thomas Miller', 'thomas@example.com', '888-222-5555'),
+(22, 'Laura Martinez', 'laura@example.com', '555-222-8888'),
+(23, 'Matthew Taylor', 'matthew@example.com', '222-555-8888'),
+(24, 'Nancy Anderson', 'nancy@example.com', '888-555-2222'),
+(25, 'Andrew White', 'andrew@example.com', '555-888-2222'),
+(26, 'Jessica Thompson', 'jessicat@example.com', '222-888-2222'),
+(27, 'Paul Garcia', 'paul@example.com', '888-222-2222'),
+(28, 'Elizabeth Martinez', 'elizabeth@example.com', '555-222-2222'),
+(29, 'Ryan Hernandez', 'ryan@example.com', '222-555-5555'),
+(30, 'Deborah Young', 'deborah@example.com', '555-222-5555'),
+(31, 'Kevin King', 'kevin@example.com', '222-555-2222'),
+(32, 'Linda Lopez', 'linda@example.com', '555-222-5555'),
+(33, 'Mark Lee', 'mark@example.com', '222-555-5555'),
+(34, 'Barbara Scott', 'barbara@example.com', '555-222-5555'),
+(35, 'William Green', 'william@example.com', '222-555-5555'),
+(36, 'Margaret Adams', 'margaret@example.com', '555-222-5555'),
+(37, 'Donald Baker', 'donald@example.com', '222-555-5555'),
+(38, 'Ashley Gonzales', 'ashley@example.com', '555-222-5555'),
+(39, 'Charles Allen', 'charles@example.com', '222-555-5555'),
+(40, 'Betty Nelson', 'betty@example.com', '555-222-5555'),
+(41, 'Michael Carter', 'michaelc@example.com', '222-555-5555'),
+(42, 'Sarah Hill', 'sarahh@example.com', '555-222-5555'),
+(43, 'Joseph Baker', 'josephb@example.com', '222-555-5555'),
+(44, 'Dorothy Ramirez', 'dorothy@example.com', '555-222-5555'),
+(45, 'Steven Ward', 'steven@example.com', '222-555-5555'),
+(46, 'Kimberly Torres', 'kimberly@example.com', '555-222-5555'),
+(47, 'Brian Peterson', 'brian@example.com', '222-555-5555'),
+(48, 'Donna Flores', 'donna@example.com', '555-222-5555'),
+(49, 'Scott Gray', 'scott@example.com', '222-555-5555'),
+(50, 'Carolyn Brooks', 'carolyn@example.com', '555-222-5555');
+
+
+INSERT INTO Exhibitions (exhibition_id, exhibition_name, start_date, end_date) VALUES
+(1, 'Renaissance Revival', '2024-06-01', '2024-08-31'),
+(2, 'Modern Masters', '2024-09-01', '2024-11-30'),
+(3, 'Impressionist Impressions', '2024-12-01', '2025-02-28'),
+(4, 'Abstract Expressionism', '2025-03-01', '2025-05-31'),
+(5, 'Contemporary Visions', '2025-06-01', '2025-08-31'),
+(6, 'Surrealist Dreams', '2025-09-01', '2025-11-30'),
+(7, 'Post-Impressionist Perspectives', '2025-12-01', '2026-02-28'),
+(8, 'Realist Reflections', '2026-03-01', '2026-05-31'),
+(9, 'Minimalist Manifestations', '2026-06-01', '2026-08-31'),
+(10, 'Futurist Fantasies', '2026-09-01', '2026-11-30'),
+(11, 'Dadaist Diversions', '2026-12-01', '2027-02-28'),
+(12, 'Constructivist Creations', '2027-03-01', '2027-05-31'),
+(13, 'Cubist Conceptions', '2027-06-01', '2027-08-31'),
+(14, 'Pop Art Perspectives', '2027-09-01', '2027-11-30'),
+(15, 'Neo-Expressionist Narratives', '2027-12-01', '2028-02-28'),
+(16, 'Conceptual Art Chronicles', '2028-03-01', '2028-05-31'),
+(17, 'Land Art Landscapes', '2028-06-01', '2028-08-31'),
+(18, 'Installation Art Innovations', '2028-09-01', '2028-11-30'),
+(19, 'Digital Art Dimensions', '2028-12-01', '2029-02-28'),
+(20, 'Environmental Art Explorations', '2029-03-01', '2029-05-31'),
+(21, 'Performance Art Pioneers', '2029-06-01', '2029-08-31'),
+(22, 'Sound Art Symphony', '2029-09-01', '2029-11-30'),
+(23, 'Video Art Voyages', '2029-12-01', '2030-02-28'),
+(24, 'Photorealistic Portraits', '2030-03-01', '2030-05-31'),
+(25, 'Sculptural Sensations', '2030-06-01', '2030-08-31'),
+(26, 'Textile Art Tales', '2030-09-01', '2030-11-30'),
+(27, 'Glass Art Galore', '2030-12-01', '2031-02-28'),
+(28, 'Mixed Media Marvels', '2031-03-01', '2031-05-31'),
+(29, 'Collage Chronicles', '2031-06-01', '2031-08-31'),
+(30, 'Street Art Stories', '2031-09-01', '2031-11-30'),
+(31, 'Graffiti Art Gallery', '2031-12-01', '2032-02-28'),
+(32, 'Tape Art Tales', '2032-03-01', '2032-05-31'),
+(33, 'Mosaic Musings', '2032-06-01', '2032-08-31'),
+(34, 'Stencil Art Stories', '2032-09-01', '2032-11-30'),
+(35, 'Digital Graffiti Gallery', '2032-12-01', '2033-02-28'),
+(36, 'Calligraphy Chronicles', '2033-03-01', '2033-05-31'),
+(37, 'Typography Tales', '2033-06-01', '2033-08-31'),
+(38, 'Hand Lettering Highlights', '2033-09-01', '2033-11-30'),
+(39, 'Book Art Bonanza', '2033-12-01', '2034-02-28'),
+(40, 'Comic Art Collection', '2034-03-01', '2034-05-31'),
+(41, 'Illustration Innovations', '2034-06-01', '2034-08-31'),
+(42, 'Digital Illustration Dialogues', '2034-09-01', '2034-11-30'),
+(43, 'Fantasy Art Fantasia', '2034-12-01', '2035-02-28'),
+(44, 'Sci-Fi Art Spectacular', '2035-03-01', '2035-05-31'),
+(45, 'Horror Art Haven', '2035-06-01', '2035-08-31'),
+(46, 'Steampunk Art Showcase', '2035-09-01', '2035-11-30'),
+(47, 'Cyberpunk Art Carnival', '2035-12-01', '2036-02-28'),
+(48, 'Gothic Art Gallery', '2036-03-01', '2036-05-31'),
+(49, 'Dark Art Dreams', '2036-06-01', '2036-08-31'),
+(50, 'Surreal Art Soirée', '2036-09-01', '2036-11-30');
+-- Adding 50 non-repetitive values as data for GalleryLocations
+INSERT INTO GalleryLocations (location_id, location_name, address, city, country, postal_code) VALUES
+(1, 'Artistry Gallery', '123 Art Street', 'New York', 'USA', '10001'),
+(2, 'Creative Hub Gallery', '456 Artist Avenue', 'Los Angeles', 'USA', '90001'),
+(3, 'Modern Art Center', '789 Canvas Road', 'Chicago', 'USA', '60601'),
+(4, 'Urban Gallery', '101 Graffiti Lane', 'Miami', 'USA', '33101'),
+(5, 'Gallery One', '234 Sculpture Boulevard', 'San Francisco', 'USA', '94101'),
+(6, 'Contemporary Art Space', '345 Brush Street', 'Seattle', 'USA', '98101'),
+(7, 'Visionary Gallery', '456 Paint Place', 'Boston', 'USA', '02101'),
+(8, 'Artisanal Gallery', '567 Palette Drive', 'Philadelphia', 'USA', '19101'),
+(9, 'Canvas Collective', '678 Easel Street', 'Atlanta', 'USA', '30301'),
+(10, 'Palette Palace', '789 Brushstroke Avenue', 'Dallas', 'USA', '75201'),
+(11, 'Art Fusion Gallery', '890 Sculpture Circle', 'Houston', 'USA', '77001'),
+(12, 'Abstract Art Loft', '901 Sketch Lane', 'Denver', 'USA', '80201'),
+(13, 'Vibrant Visions Gallery', '1023 Colorful Court', 'Phoenix', 'USA', '85001'),
+(14, 'Eclectic Art Emporium', '1134 Gallery Way', 'Portland', 'USA', '97201'),
+(15, 'Sculpture Sanctuary', '1245 Clay Street', 'Detroit', 'USA', '48201'),
+(16, 'Gallery Gazebo', '1356 Masterpiece Boulevard', 'Austin', 'USA', '78701'),
+(17, 'Canvas Cove', '1467 Artisan Avenue', 'Charlotte', 'USA', '28201'),
+(18, 'Palette Pavilion', '1578 Brushstroke Boulevard', 'San Diego', 'USA', '92101'),
+(19, 'Modernist Museum', '1689 Artistic Lane', 'Minneapolis', 'USA', '55401'),
+(20, 'Artisan Alley', '1790 Palette Place', 'Orlando', 'USA', '32801'),
+(21, 'Cityscape Gallery', '1801 Street Art Drive', 'Las Vegas', 'USA', '89101'),
+(22, 'Fine Art Forum', '1912 Canvas Court', 'Washington D.C.', 'USA', '20001'),
+(23, 'Gallery Grove', '2023 Sculpture Street', 'New Orleans', 'USA', '70112'),
+(24, 'Palette Plaza', '2134 Brushstroke Lane', 'Salt Lake City', 'USA', '84101'),
+(25, 'Artistic Annex', '2245 Gallery Avenue', 'Kansas City', 'USA', '64101'),
+(26, 'Canvas Corner', '2356 Artisan Drive', 'Raleigh', 'USA', '27601'),
+(27, 'Color Canvas Gallery', '2467 Paint Place', 'Indianapolis', 'USA', '46201'),
+(28, 'Gallery Garden', '2578 Sculpture Boulevard', 'San Antonio', 'USA', '78201'),
+(29, 'Artistic Asylum', '2689 Art Street', 'Cleveland', 'USA', '44101'),
+(30, 'Urban Art Space', '2790 Graffiti Lane', 'Columbus', 'USA', '43201'),
+(31, 'Sculpture Square', '2901 Clay Court', 'Pittsburgh', 'USA', '15201'),
+(32, 'Palette Park', '3012 Brushstroke Drive', 'St. Louis', 'USA', '63101'),
+(33, 'Creative Canvas Gallery', '3123 Canvas Circle', 'Memphis', 'USA', '38101'),
+(34, 'Gallery Gateway', '3234 Palette Place', 'San Jose', 'USA', '95101'),
+(35, 'Artisan Avenue', '3345 Artist Avenue', 'Louisville', 'USA', '40201'),
+(36, 'Canvas Court', '3456 Street Art Street', 'Tampa', 'USA', '33601'),
+(37, 'Palette Pointe', '3567 Brushstroke Boulevard', 'Oakland', 'USA', '94601'),
+(38, 'Urban Artistry Gallery', '3678 Artistic Avenue', 'Baltimore', 'USA', '21201'),
+(39, 'Modernist Manor', '3789 Canvas Lane', 'Milwaukee', 'USA', '53201'),
+(40, 'Sculpture Street', '3890 Gallery Street', 'Sacramento', 'USA', '95801'),
+(41, 'Palette Place', '3901 Paint Place', 'Albuquerque', 'USA', '87101'),
+(42, 'Art Avenue', '4012 Sculpture Avenue', 'Tucson', 'USA', '85701'),
+(43, 'Creative Canvas Corner', '4123 Art Street', 'Fresno', 'USA', '93701'),
+(44, 'Gallery Grove', '4234 Brushstroke Boulevard', 'Long Beach', 'USA', '90801'),
+(45, 'Artistic Ascent', '4345 Palette Lane', 'Virginia Beach', 'USA', '23451'),
+(46, 'Canvas Corner', '4456 Artist Avenue', 'Atlanta', 'USA', '30301'),
+(47, 'Palette Pavilion', '4567 Sculpture Street', 'Kansas City', 'USA', '64101'),
+(48, 'Urban Art Space', '4678 Gallery Avenue', 'Charlotte', 'USA', '28201'),
+(49, 'Artistic Annex', '4789 Canvas Court', 'Nashville', 'USA', '37201'),
+(50, 'Color Canvas Gallery', '4890 Paint Place', 'Jacksonville', 'USA', '32201');
+
+
+INSERT INTO GallerySpaces (space_id, space_name, location_id, capacity) VALUES
+(1, 'Main Gallery', 1, 100),
+(2, 'Second Floor Gallery', 1, 50),
+(3, 'VIP Lounge', 1, 20),
+(4, 'Outdoor Sculpture Garden', 1, 50),
+(5, 'Contemporary Art Room', 1, 30),
+(6, 'Historical Art Wing', 1, 40),
+(7, 'Modern Art Pavilion', 1, 50),
+(8, 'Artisanal Crafts Hall', 1, 25),
+(9, 'Photography Studio', 1, 15),
+(10, 'Interactive Installation Space', 1, 30),
+(11, 'Digital Art Gallery', 1, 40),
+(12, 'Experimental Art Lab', 1, 20),
+(13, 'Sculpture Workshop', 1, 20),
+(14, 'Ceramics Studio', 1, 15),
+(15, 'Performance Art Stage', 1, 50),
+(16, 'Artist Residency Loft', 1, 10),
+(17, 'Printmaking Atelier', 1, 25),
+(18, 'Textile Art Room', 1, 20),
+(19, 'Glassblowing Studio', 1, 15),
+(20, 'Drawing Studio', 1, 20),
+(21, 'Painting Workshop', 1, 20),
+(22, 'Mixed Media Gallery', 1, 30),
+(23, 'Minimalist Art Space', 1, 25),
+(24, 'Abstract Expressionism Room', 1, 30),
+(25, 'Realism Gallery', 1, 30),
+(26, 'Impressionist Collection', 1, 40),
+(27, 'Baroque Art Chamber', 1, 20),
+(28, 'Renaissance Hall', 1, 25),
+(29, 'Medieval Art Wing', 1, 20),
+(30, 'Asian Art Pavilion', 1, 40),
+(31, 'African Art Exhibit', 1, 30),
+(32, 'Oceanic Art Gallery', 1, 20),
+(33, 'Indigenous Art Corner', 1, 15),
+(34, 'European Art Room', 1, 25),
+(35, 'Latin American Art Annex', 1, 20),
+(36, 'Middle Eastern Art Oasis', 1, 20),
+(37, 'Contemporary African Diaspora Gallery', 1, 30),
+(38, 'Women in Art Showcase', 1, 20),
+(39, 'LGBTQ+ Art Lounge', 1, 20),
+(40, 'Disability Art Center', 1, 15),
+(41, 'Environmental Art Space', 1, 25),
+(42, 'Political Art Gallery', 1, 30),
+(43, 'Social Justice Exhibit', 1, 20),
+(44, 'Climate Change Awareness Room', 1, 15),
+(45, 'Human Rights Art Hall', 1, 20),
+(46, 'Peace and Conflict Art Corner', 1, 15),
+(47, 'Educational Art Classroom', 1, 25),
+(48, 'Children''s Art Studio', 1, 20),
+(49, 'Family Art Workshop', 1, 20),
+(50, 'Community Art Space', 1, 30);
+
+INSERT INTO Transactions (transaction_id, customer_id, artwork_id, sale_date, price) VALUES
+(1, 1, 1, '2023-05-15', 9000000.00),
+(2, 2, 2, '2023-07-20', 18000000.00),
+(3, 3, 3, '2023-09-10', 13500000.00),
+(4, 4, 4, '2023-08-05', 27000000.00),
+(5, 5, 5, '2023-06-30', 22500000.00),
+(6, 6, 6, '2023-04-25', 10800000.00),
+(7, 7, 7, '2023-10-15', 19800000.00),
+(8, 8, 8, '2023-11-20', 16200000.00),
+(9, 9, 9, '2023-12-01', 25200000.00),
+(10, 10, 10, '2023-08-15', 15300000.00),
+(11, 11, 11, '2023-05-10', 14400000.00),
+(12, 12, 12, '2023-03-22', 27000000.00),
+(13, 13, 13, '2023-09-05', 22500000.00),
+(14, 14, 14, '2023-10-30', 31500000.00),
+(15, 15, 15, '2023-11-25', 18900000.00),
+(16, 16, 16, '2023-12-10', 36000000.00),
+(17, 17, 17, '2023-07-15', 20700000.00),
+(18, 18, 18, '2023-06-01', 28800000.00),
+(19, 19, 19, '2023-05-05', 24300000.00),
+(20, 20, 20, '2023-02-20', 25200000.00),
+(21, 21, 21, '2023-01-10', 34200000.00),
+(22, 22, 22, '2023-03-05', 27900000.00),
+(23, 23, 23, '2023-04-20', 23400000.00),
+(24, 24, 24, '2023-12-15', 27000000.00),
+(25, 25, 25, '2023-08-10', 25200000.00),
+(26, 26, 26, '2023-06-05', 9900000.00),
+(27, 27, 27, '2023-04-25', 12600000.00),
+(28, 28, 28, '2023-03-15', 14400000.00),
+(29, 29, 29, '2023-09-30', 17100000.00),
+(30, 30, 30, '2023-11-05', 19800000.00),
+(31, 31, 31, '2023-10-20', 10800000.00),
+(32, 32, 32, '2023-07-22', 18000000.00),
+(33, 33, 33, '2023-05-12', 15300000.00),
+(34, 34, 34, '2023-08-01', 23400000.00),
+(35, 35, 35, '2023-09-18', 11700000.00),
+(36, 36, 36, '2023-11-10', 16200000.00),
+(37, 37, 37, '2023-10-05', 18900000.00),
+(38, 38, 38, '2023-06-28', 20700000.00),
+(39, 39, 39, '2023-05-15', 19800000.00),
+(40, 40, 40, '2023-03-03', 24000000.00),
+(41, 41, 41, '2023-01-28', 20000000.00),
+(42, 42, 42, '2023-07-17', 19000000.00),
+(43, 43, 43, '2023-08-28', 21000000.00),
+(44, 44, 44, '2023-04-14', 19000000.00),
+(45, 45, 45, '2023-09-08', 22000000.00),
+(46, 46, 46, '2023-10-25', 25000000.00),
+(47, 47, 47, '2023-11-12', 28000000.00),
+(48, 48, 48, '2023-12-20', 30000000.00),
+(49, 49, 49, '2023-05-30', 32000000.00),
+(50, 50, 50, '2023-06-20', 24000000.00);
+INSERT INTO EmployeeRoles (role_id, role_name) VALUES
+(1, 'Curator'),
+(2, 'Gallery Director'),
+(3, 'Registrar'),
+(4, 'Conservator'),
+(5, 'Art Handler'),
+(6, 'Marketing Coordinator'),
+(7, 'Events Manager'),
+(8, 'Educator'),
+(9, 'Visitor Services Representative'),
+(10, 'Security Supervisor'),
+(11, 'Financial Analyst'),
+(12, 'HR Manager'),
+(13, 'IT Specialist'),
+(14, 'Facilities Manager'),
+(15, 'Volunteer Coordinator'),
+(16, 'Membership Manager'),
+(17, 'Public Relations Officer'),
+(18, 'Retail Manager'),
+(19, 'Catering Coordinator'),
+(20, 'Audiovisual Technician');
+
+
+-- Adding 50 non-repetitive values to the Employees table
+INSERT INTO Employees (employee_id, employee_name, role_id, location_id)
+VALUES
+(1, 'John Doe', 1, 1),
+(2, 'Jane Smith', 2, 2),
+(3, 'Michael Johnson', 3, 3),
+(4, 'Emily Brown', 4, 4),
+(5, 'David Wilson', 5, 5),
+(6, 'Jennifer Lee', 6, 6),
+(7, 'Daniel Martinez', 7, 7),
+(8, 'Sarah Garcia', 8, 8),
+(9, 'James Rodriguez', 9, 9),
+(10, 'Amanda Lopez', 10, 10),
+(11, 'Matthew Hernandez', 11, 11),
+(12, 'Nicole Perez', 12, 12),
+(13, 'Christopher Gonzalez', 13, 13),
+(14, 'Jessica Sanchez', 14, 14),
+(15, 'Joshua Smith', 15, 15),
+(16, 'Ashley Miller', 16, 16),
+(17, 'Andrew Davis', 17, 17),
+(18, 'Elizabeth Martinez', 18, 18),
+(19, 'Ryan Taylor', 19, 19),
+(20, 'Olivia Thomas', 20, 20),
+(21, 'William Anderson', 1, 1),
+(22, 'Samantha Wilson', 2, 2),
+(23, 'Jason Jackson', 3, 3),
+(24, 'Victoria White', 4, 4),
+(25, 'Kevin Moore', 5, 5),
+(26, 'Natalie Harris', 6, 6),
+(27, 'Robert Martin', 7, 7),
+(28, 'Kayla Thompson', 8, 8),
+(29, 'Daniel Clark', 9, 9),
+(30, 'Lauren Rodriguez', 10, 10),
+(31, 'Justin Lewis', 11, 11),
+(32, 'Amber King', 12, 12),
+(33, 'Tyler Green', 13, 13),
+(34, 'Rachel Evans', 14, 14),
+(35, 'Brandon Lee', 15, 15),
+(36, 'Hannah Scott', 16, 16),
+(37, 'Eric Turner', 17, 17),
+(38, 'Megan Baker', 18, 18),
+(39, 'Kyle Garcia', 19, 19),
+(40, 'Stephanie Cook', 20, 20),
+(41, 'David Johnson', 1, 1),
+(42, 'Emma Thompson', 2, 2),
+(43, 'Christopher Hernandez', 3, 3),
+(44, 'Madison Hall', 4, 4),
+(45, 'Joshua Young', 5, 5),
+(46, 'Jennifer Moore', 6, 6),
+(47, 'William Jackson', 7, 7),
+(48, 'Sophia Nelson', 8, 8),
+(49, 'Matthew Martinez', 9, 9),
+(50, 'Alyssa Phillips', 10, 10);
+
+-- Adding 50 non-repetitive values to the ExhibitionArtworks table
+INSERT INTO ExhibitionArtworks (exhibition_id, artwork_id, space_id) VALUES
+(1, 1, 1),
+(1, 2, 1),
+(1, 3, 1),
+(1, 4, 1),
+(1, 5, 1),
+(2, 6, 2),
+(2, 7, 2),
+(2, 8, 2),
+(2, 9, 2),
+(2, 10, 2),
+(3, 11, 3),
+(3, 12, 3),
+(3, 13, 3),
+(3, 14, 3),
+(3, 15, 3),
+(4, 16, 4),
+(4, 17, 4),
+(4, 18, 4),
+(4, 19, 4),
+(4, 20, 4),
+(5, 21, 5),
+(5, 22, 5),
+(5, 23, 5),
+(5, 24, 5),
+(5, 25, 5),
+(6, 26, 6),
+(6, 27, 6),
+(6, 28, 6),
+(6, 29, 6),
+(6, 30, 6),
+(7, 31, 7),
+(7, 32, 7),
+(7, 33, 7),
+(7, 34, 7),
+(7, 35, 7),
+(8, 36, 8),
+(8, 37, 8),
+(8, 38, 8),
+(8, 39, 8),
+(8, 40, 8),
+(9, 41, 9),
+(9, 42, 9),
+(9, 43, 9),
+(9, 44, 9),
+(9, 45, 9),
+(10, 46, 10),
+(10, 47, 10),
+(10, 48, 10),
+(10, 49, 10),
+(10, 50, 10);
+
+-- QUERIES
+
+-- Count the number of artworks per artist:
+SELECT artist_id, artist_name, COUNT(*) AS num_artworks
+FROM Artists
+GROUP BY artist_id, artist_name
+ORDER BY num_artworks DESC;
+
+-- Find the average price of artworks by genre:
+SELECT genre, AVG(price) AS avg_price
+FROM Artworks
+GROUP BY genre
+ORDER BY avg_price DESC;
+
+-- List the top 10 customers who made the highest total purchases:
+SELECT transaction_id, customer_name, SUM(price) AS total_purchases
+FROM Transactions
+JOIN Customers ON Transactions.customer_id = Customers.customer_id
+GROUP BY transaction_id, customer_name
+ORDER BY total_purchases DESC
+LIMIT 10;
+
+-- Find the total number of transaction per month:
+SELECT EXTRACT(YEAR_MONTH FROM sale_date) AS transaction_month, COUNT(*) AS num_transactions
+FROM Transactions
+GROUP BY transaction_month
+ORDER BY transaction_month;
+
+
+-- List all artworks with their respective artists and prices sorted by price descending:
+SELECT A.artwork_title, Ar.artist_name, A.price
+FROM Artworks A
+JOIN Artists Ar ON A.artist_id = Ar.artist_id
+ORDER BY A.price DESC;
+
+
+-- Calculate the average price of artworks in each gallery space:
+SELECT GS.space_id, GS.space_name, AVG(A.price) AS avg_price
+FROM Artworks A
+JOIN ExhibitionArtworks EA ON A.artwork_id = EA.artwork_id
+JOIN GallerySpaces GS ON EA.space_id = GS.space_id
+GROUP BY GS.space_id, GS.space_name
+ORDER BY avg_price DESC;
+
+-- Find the most common medium used for artworks:
+SELECT medium, COUNT(*) AS num_artworks
+FROM Artworks
+GROUP BY medium
+ORDER BY num_artworks DESC
+LIMIT 1;
+
+-- List all artists born after 1800:
+SELECT *
+FROM Artists
+WHERE birth_date > '1800-01-01';
+
+-- Find the total number of transactions per customer:
+SELECT transaction_id, COUNT(*) AS num_transactions
+FROM Transactions
+JOIN Customers ON Transactions.customer_id = Customers.customer_id
+GROUP BY transaction_id
+ORDER BY num_transactions DESC;
+
+-- Calculate the total revenue generated per year:
+SELECT EXTRACT(YEAR FROM sale_date) AS transaction_year, SUM(price) AS total_revenue
+FROM Transactions
+GROUP BY transaction_year
+ORDER BY transaction_year;
+
+-- List all artworks sold at a price higher than $1,000,000:
+SELECT *
+FROM Artworks
+WHERE price > 1000000;
+
+-- Find the average capacity of gallery spaces:
+SELECT AVG(capacity) AS avg_capacity
+FROM GallerySpaces;
+
+-- Find the average capacity of gallery spaces:
+SELECT AVG(capacity) AS avg_capacity
+FROM GallerySpaces;
+
+-- Calculate the total number of artworks in each genre:
+SELECT genre, COUNT(*) AS num_artworks
+FROM Artworks
+GROUP BY genre
+ORDER BY num_artworks DESC;
+
+-- Find the top 5 most expensive artworks:
+SELECT artwork_title, price
+FROM Artworks
+ORDER BY price DESC
+LIMIT 5;
+
+-- Calculate the total number of artworks per medium:
+SELECT medium, COUNT(*) AS num_artworks
+FROM Artworks
+GROUP BY medium
+ORDER BY num_artworks DESC;
+
+
+-- Find the average price of artworks created by artists from each nationality:
+SELECT nationality, AVG(price) AS avg_price
+FROM Artworks A
+JOIN Artists Ar ON A.artist_id = Ar.artist_id
+GROUP BY nationality
+ORDER BY avg_price DESC;
+
+
+-- List all artworks created by artists born before 1800:
+SELECT *
+FROM Artworks
+JOIN Artists ON Artworks.artist_id = Artists.artist_id
+WHERE Artists.birth_date < '1800-01-01';
+
+-- Calculate the total number of artworks in each exhibition:
+SELECT exhibition_id, COUNT(*) AS num_artworks
+FROM ExhibitionArtworks
+GROUP BY exhibition_id
+ORDER BY num_artworks DESC;
+
+-- Find the average price of artworks in each genre for artworks created after 1900:
+SELECT genre, AVG(price) AS avg_price
+FROM Artworks A
+JOIN Artists Ar ON A.artist_id = Ar.artist_id
+WHERE Ar.birth_date > '1900-01-01'
+GROUP BY genre
+ORDER BY avg_price DESC;
+
+-- Find the total number of artworks sold in each city:
+SELECT GL.city, COUNT(*) AS num_artworks_sold
+FROM GalleryLocations GL
+JOIN GallerySpaces GS ON GL.location_id = GS.location_id
+JOIN ExhibitionArtworks EA ON GS.space_id = EA.space_id
+GROUP BY GL.city
+ORDER BY num_artworks_sold DESC;
+
+-- List the artists with the highest total revenue from artwork sales:
+SELECT Ar.artist_id, Ar.artist_name, SUM(T.price) AS total_revenue
+FROM Artists Ar
+JOIN Artworks A ON Ar.artist_id = A.artist_id
+JOIN Transactions T ON A.artwork_id = T.artwork_id
+GROUP BY Ar.artist_id, Ar.artist_name
+ORDER BY total_revenue DESC;
+
+-- Find the average price of artworks sold in each exhibition:
+SELECT EA.exhibition_id, AVG(A.price) AS avg_price
+FROM ExhibitionArtworks EA
+JOIN Artworks A ON EA.artwork_id = A.artwork_id
+GROUP BY EA.exhibition_id
+ORDER BY avg_price DESC;
+
+
+
+-- ERRORS
+-- List the customers who made purchases during multiple exhibitions:
+SELECT C.customer_id, C.customer_name
+FROM Customers AS C
+JOIN Transactions AS T ON C.customer_id = T.customer_id;
+
+-- Find the total number of artworks sold in each city:
+SELECT C.customer_id, C.customer_name
+FROM Customers AS C
+JOIN Transactions T ON C.customer_id = T.customer_id
+JOIN ExhibitionArtworks EA ON T.artwork_id = EA.artwork_id
+WHERE EA.exhibition_id = 123;
+
+-- List all customers who made purchases above a certain threshold:
+SELECT *
+FROM Customers
+WHERE customer_id IN (
+    SELECT customer_id
+    FROM Transactions
+    GROUP BY customer_id
+    HAVING SUM(price) > 500
+);
+
+-- List the artworks sold during a specific exhibition:
+SELECT A.artwork_title, A.price
+FROM Artworks A
+JOIN ExhibitionArtworks EA ON A.artwork_id = EA.artwork_id
+WHERE EA.exhibition_id = 25;
+
+-- Calculate the total revenue generated from each exhibition:
+SELECT transaction_id, exhibition_name, SUM(price) AS total_revenue
+FROM Transactions
+JOIN ExhibitionArtworks ON Transactions.artwork_id = ExhibitionArtworks.artwork_id
+JOIN Exhibitions ON ExhibitionArtworks.exhibition_id = Exhibitions.exhibition_id
+GROUP BY exhibition_id, exhibition_name
+ORDER BY total_revenue DESC;
